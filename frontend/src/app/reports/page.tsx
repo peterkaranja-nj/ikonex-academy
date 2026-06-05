@@ -43,14 +43,30 @@ export default function ReportsPage() {
     enabled: !!selectedStudent,
   });
 
+  const triggerDownload = async (url: string, filename: string) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(blobUrl);
+  };
+
   const downloadStudentReport = async (studentId: string, name: string) => {
     setGeneratingId(studentId);
     try {
       const url = `${API}/api/v1/reports/student/${studentId}/report-card${selectedExamType ? `?examTypeId=${selectedExamType}` : ''}`;
-      window.open(url, '_blank');
-      toast.success(`Report card for ${name} is downloading…`);
+      await triggerDownload(url, `${name.replace(/\s+/g, '_')}_report_card.pdf`);
+      toast.success(`Report card for ${name} downloaded`);
+    } catch {
+      toast.error('Failed to download report. Try again.');
     } finally {
-      setTimeout(() => setGeneratingId(null), 2000);
+      setGeneratingId(null);
     }
   };
 
@@ -58,23 +74,26 @@ export default function ReportsPage() {
     if (!selectedStream) return;
     setGeneratingId('class');
     try {
+      const streamName = streams?.find((s: any) => s.id === selectedStream)?.name || 'class';
       const url = `${API}/api/v1/reports/class/${selectedStream}${selectedExamType ? `?examTypeId=${selectedExamType}` : ''}`;
-      window.open(url, '_blank');
-      toast.success('Class report is downloading…');
+      await triggerDownload(url, `${streamName.replace(/\s+/g, '_')}_class_report.pdf`);
+      toast.success('Class report downloaded');
+    } catch {
+      toast.error('Failed to download report. Try again.');
     } finally {
-      setTimeout(() => setGeneratingId(null), 2000);
+      setGeneratingId(null);
     }
   };
 
-  const bulkDownloadAll = () => {
+  const bulkDownloadAll = async () => {
     if (!streamStudents?.length) return;
-    toast.success(`Queuing ${streamStudents.length} report cards…`);
-    streamStudents.forEach((student: any, i: number) => {
-      setTimeout(() => {
-        const url = `${API}/api/v1/reports/student/${student.id}/report-card${selectedExamType ? `?examTypeId=${selectedExamType}` : ''}`;
-        window.open(url, '_blank');
-      }, i * 800);
-    });
+    toast.success(`Downloading ${streamStudents.length} report cards…`);
+    for (let i = 0; i < streamStudents.length; i++) {
+      const student = streamStudents[i] as any;
+      const url = `${API}/api/v1/reports/student/${student.id}/report-card${selectedExamType ? `?examTypeId=${selectedExamType}` : ''}`;
+      await triggerDownload(url, `${student.first_name}_${student.last_name}_report_card.pdf`).catch(() => {});
+      if (i < streamStudents.length - 1) await new Promise(r => setTimeout(r, 600));
+    }
   };
 
   const selectedStudentInfo = streamStudents?.find((s: any) => s.id === selectedStudent);
