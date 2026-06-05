@@ -33,7 +33,7 @@ export function PageHeader({ title, description, subtitle, action, actions, icon
   const sub = subtitle || description;
   const act = actions || action;
   return (
-    <div className="flex items-start justify-between mb-6 gap-4">
+    <div className="flex flex-wrap items-start justify-between mb-6 gap-3">
       <div className="flex items-center gap-3">
         {icon && <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">{icon}</div>}
         <div>

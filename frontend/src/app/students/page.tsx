@@ -126,11 +126,11 @@ export default function StudentsPage() {
                   <tr>
                     <th>Student</th>
                     <th>Adm No.</th>
-                    <th>Class</th>
-                    <th>Gender</th>
-                    <th>Guardian</th>
+                    <th className="hidden sm:table-cell">Class</th>
+                    <th className="hidden md:table-cell">Gender</th>
+                    <th className="hidden lg:table-cell">Guardian</th>
                     <th>Status</th>
-                    <th>Admitted</th>
+                    <th className="hidden lg:table-cell">Admitted</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -157,13 +157,13 @@ export default function StudentsPage() {
                           {student.admission_number}
                         </span>
                       </td>
-                      <td>
+                      <td className="hidden sm:table-cell">
                         <span className="text-sm text-slate-700">{student.class_name}</span>
                       </td>
-                      <td>
+                      <td className="hidden md:table-cell">
                         <span className="text-sm text-slate-600">{student.gender}</span>
                       </td>
-                      <td>
+                      <td className="hidden lg:table-cell">
                         <p className="text-sm text-slate-700">{student.guardian_name}</p>
                       </td>
                       <td>
@@ -172,7 +172,7 @@ export default function StudentsPage() {
                           {student.status}
                         </span>
                       </td>
-                      <td>
+                      <td className="hidden lg:table-cell">
                         <span className="text-sm text-slate-500">{formatDate(student.admission_date)}</span>
                       </td>
                       <td>

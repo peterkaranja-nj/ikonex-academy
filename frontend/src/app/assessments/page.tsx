@@ -165,11 +165,11 @@ export default function AssessmentsPage() {
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th className="hidden sm:table-cell">#</th>
                     <th>Student Name</th>
-                    <th>Adm No.</th>
+                    <th className="hidden sm:table-cell">Adm No.</th>
                     <th>Score (/{maxScore})</th>
-                    <th>Remarks</th>
+                    <th className="hidden md:table-cell">Remarks</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -180,13 +180,13 @@ export default function AssessmentsPage() {
                     const hasExisting = existingScores.some(s => s.student_id === student.id);
                     return (
                       <tr key={student.id}>
-                        <td className="text-slate-400 text-sm w-10">{i + 1}</td>
+                        <td className="hidden sm:table-cell text-slate-400 text-sm w-10">{i + 1}</td>
                         <td>
                           <p className="font-medium text-sm text-slate-900">
                             {student.first_name} {student.last_name}
                           </p>
                         </td>
-                        <td>
+                        <td className="hidden sm:table-cell">
                           <span className="font-mono text-xs text-slate-500">{student.admission_number}</span>
                         </td>
                         <td className="w-40">
@@ -210,7 +210,7 @@ export default function AssessmentsPage() {
                             />
                           </div>
                         </td>
-                        <td>
+                        <td className="hidden md:table-cell">
                           <input
                             type="text"
                             className="form-input w-36 text-xs"

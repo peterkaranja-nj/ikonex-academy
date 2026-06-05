@@ -61,13 +61,25 @@ export default function ResultsPage() {
       : <ChevronDown className="w-3 h-3 text-blue-600" />;
   };
 
-  const downloadReport = () => {
+  const downloadReport = async () => {
     if (!selectedStream) return;
-    window.open(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/v1/reports/class/${selectedStream}${selectedExamType ? `?examTypeId=${selectedExamType}` : ''}`,
-      '_blank'
-    );
-    toast.success('Generating PDF report…');
+    try {
+      const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/v1/reports/class/${selectedStream}${selectedExamType ? `?examTypeId=${selectedExamType}` : ''}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `${streamInfo?.name || 'class'}_report.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+      toast.success('PDF downloaded');
+    } catch {
+      toast.error('Failed to download report');
+    }
   };
 
   return (
@@ -203,14 +215,14 @@ export default function ResultsPage() {
                     <th className="cursor-pointer select-none" onClick={() => handleSort('name')}>
                       <span className="flex items-center gap-1">Student <SortIcon field="name" /></span>
                     </th>
-                    <th>Adm No.</th>
-                    <th>Subjects</th>
-                    <th>Total Marks</th>
+                    <th className="hidden sm:table-cell">Adm No.</th>
+                    <th className="hidden md:table-cell">Subjects</th>
+                    <th className="hidden md:table-cell">Total Marks</th>
                     <th className="cursor-pointer select-none" onClick={() => handleSort('avg')}>
                       <span className="flex items-center gap-1">Average <SortIcon field="avg" /></span>
                     </th>
                     <th>Grade</th>
-                    <th>Points</th>
+                    <th className="hidden sm:table-cell">Points</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -233,9 +245,9 @@ export default function ResultsPage() {
                           {result.student_name}
                         </a>
                       </td>
-                      <td className="text-slate-500 font-mono text-sm">{result.admission_number}</td>
-                      <td className="text-center">{result.subjects_count}</td>
-                      <td className="font-semibold">{result.total_marks ?? '—'}</td>
+                      <td className="hidden sm:table-cell text-slate-500 font-mono text-sm">{result.admission_number}</td>
+                      <td className="hidden md:table-cell text-center">{result.subjects_count}</td>
+                      <td className="hidden md:table-cell font-semibold">{result.total_marks ?? '—'}</td>
                       <td>
                         <div className="flex items-center gap-2">
                           <div className="flex-1 bg-slate-100 rounded-full h-1.5 max-w-[80px]">
@@ -250,7 +262,7 @@ export default function ResultsPage() {
                         </div>
                       </td>
                       <td><GradeBadge grade={result.grade || '—'} /></td>
-                      <td className="font-bold text-slate-800">{result.total_points ?? '—'}</td>
+                      <td className="hidden sm:table-cell font-bold text-slate-800">{result.total_points ?? '—'}</td>
                     </tr>
                   ))}
                 </tbody>

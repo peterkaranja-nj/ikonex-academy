@@ -106,23 +106,23 @@ export default function DashboardPage() {
           style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 60%, #34d399 100%)' }}>
           <div className="absolute inset-0 opacity-[0.06]"
             style={{ backgroundImage: 'radial-gradient(circle at 15% 50%, white, transparent 55%), radial-gradient(circle at 85% 15%, white, transparent 45%)' }} />
-          <div className="relative flex items-start justify-between gap-6">
+          <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
               <p className="text-emerald-300 text-sm font-medium">{greeting()} 👋</p>
-              <h2 className="text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight">
+              <h2 className="text-xl sm:text-3xl font-extrabold mt-1 tracking-tight">
                 Welcome to Ikonex Academy SMS
               </h2>
               <p className="text-emerald-200 text-sm mt-2">
                 Academic Year 2025/2026 &nbsp;·&nbsp; {todayLabel()}
               </p>
             </div>
-            <div className="hidden sm:flex items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 sm:shrink-0">
               <Link href="/students/new"
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all">
                 <Users className="w-4 h-4" /> Register Student
               </Link>
               <Link href="/assessments"
-                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all">
                 <ClipboardList className="w-4 h-4" /> Enter Scores
               </Link>
             </div>
@@ -171,7 +171,7 @@ export default function DashboardPage() {
               </ResponsiveContainer>
 
               {/* Capacity progress bars */}
-              <div className="grid grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-100">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-100">
                 {(stats?.formData || []).map((d: any, i: number) => (
                   <div key={d.name}>
                     <div className="flex justify-between text-xs text-slate-500 mb-1">

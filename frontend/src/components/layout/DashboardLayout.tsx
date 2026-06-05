@@ -144,7 +144,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 top-11 w-80 rounded-2xl shadow-xl border border-slate-200/70 z-50 overflow-hidden"
+              <div className="absolute right-0 top-11 w-[min(20rem,calc(100vw-1rem))] rounded-2xl shadow-xl border border-slate-200/70 z-50 overflow-hidden"
                 style={{ background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(16px)' }}>
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">

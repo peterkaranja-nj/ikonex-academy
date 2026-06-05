@@ -107,22 +107,23 @@ export default function ReportsPage() {
       />
 
       {/* Tab Toggle */}
-      <div className="flex gap-1 bg-slate-100 p-1 rounded-xl w-fit mb-6">
+      <div className="flex gap-1 bg-slate-100 p-1 rounded-xl w-full sm:w-fit mb-6">
         {[
-          { key: 'individual', label: 'Individual Report Cards', icon: User },
-          { key: 'class', label: 'Class Reports', icon: Users },
-        ].map(({ key, label, icon: Icon }) => (
+          { key: 'individual', label: 'Individual Report Cards', shortLabel: 'Individual', icon: User },
+          { key: 'class', label: 'Class Reports', shortLabel: 'Class', icon: Users },
+        ].map(({ key, label, shortLabel, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key as any)}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            className={`flex flex-1 sm:flex-none items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
               activeTab === key
                 ? 'bg-white shadow-sm text-emerald-700 border border-emerald-100'
                 : 'text-slate-600 hover:text-slate-800'
             }`}
           >
-            <Icon className="w-4 h-4" />
-            {label}
+            <Icon className="w-4 h-4 shrink-0" />
+            <span className="sm:hidden">{shortLabel}</span>
+            <span className="hidden sm:inline">{label}</span>
           </button>
         ))}
       </div>
@@ -199,11 +200,11 @@ export default function ReportsPage() {
             {selectedStudent && !previewLoading && studentPreview && (
               <div className="card overflow-hidden">
                 {/* Report Preview Header */}
-                <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white p-6">
-                  <div className="flex items-start justify-between">
+                <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white p-5 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div>
                       <p className="text-xs font-semibold text-amber-400 uppercase tracking-widest mb-1">Ikonex Academy</p>
-                      <h2 className="text-xl font-bold">
+                      <h2 className="text-lg sm:text-xl font-bold">
                         {selectedStudentInfo ? `${selectedStudentInfo.first_name} ${selectedStudentInfo.last_name}` : ''}
                       </h2>
                       <p className="text-slate-300 text-sm mt-1">
@@ -213,7 +214,7 @@ export default function ReportsPage() {
                     <button
                       onClick={() => downloadStudentReport(selectedStudent, selectedStudentInfo ? `${selectedStudentInfo.first_name} ${selectedStudentInfo.last_name}` : '')}
                       disabled={generatingId === selectedStudent}
-                      className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-60"
+                      className="self-start flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-60"
                     >
                       {generatingId === selectedStudent
                         ? <Loader2 className="w-4 h-4 animate-spin" />
